@@ -6,7 +6,7 @@
 # @Author: Stephen Hsu
 # @Date:  Jan 10, 2018 - 13:32:31
 # @Last Modified by:   Stephen Hsu
-# @Last Modified time: Dec 5, 2019 - 11:26:30
+# @Last Modified time: Dec 5, 2019 - 14:09:40
 # @
 # @Email: stephenhsu@allion.com
 #
@@ -23,10 +23,8 @@ control = {0: 'off', 1: 'on', 2: 'Switch', 3: 'reset'}
 def send_control_to_uis(ipaddr, val_target, val_control):
     try:
         res = requests.request('GET', 'http://%s/cgi-bin/control2.cgi' % ipaddr)
-        payload = {'user': 'admin', 'passwd': 'admin', 'target': None, 'control': None}
-        payload['target'] = val_target
-        payload['control'] = val_control
-        r = requests.get('http://%s/cgi-bin/control2.cgi' % (ipaddr), params=payload)
+        payload = {'user': 'admin', 'passwd': 'admin', 'target': val_target, 'control': val_control}
+        r = requests.get('http://%s/cgi-bin/control2.cgi' % ipaddr, params=payload)
     except:
         print("[UIS] Connection Failed")
         return False
@@ -34,7 +32,7 @@ def send_control_to_uis(ipaddr, val_target, val_control):
 
 
 def dict_search(key, dct):
-    for idx, value in dct.iteritems():
+    for idx, value in dct.items():
         if idx == key:
             return value
 
@@ -44,7 +42,7 @@ def main():
     if len(sys.argv) < 4:
         print("Usage: \n\tpython %s IP target=[1:Switch 1|2: Switch 2|3:All] control=[0:OFF|1:ON|2:Reset] \n" \
               "\ti.e. python %s '172.16.33.104' 1 1" % (sys.argv[0], sys.argv[0]))
-    sys.exit(0)
+        sys.exit(0)
 
     ipaddr = sys.argv[1]
     target = int(sys.argv[2])
